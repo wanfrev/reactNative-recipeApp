@@ -2,27 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const theme = useTheme();
 
   const handleRegister = async () => {
-    // Validar formato de correo electrónico
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Error', 'El email no es válido');
       return;
     }
 
-    // Validar longitud de la contraseña
     if (password.length < 8) {
       Alert.alert('Error', 'La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
-    // Validar que las contraseñas coincidan
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden');
       return;
@@ -33,11 +32,7 @@ export default function RegisterScreen({ navigation }) {
         email,
         password
       });
-      
-      // Aquí puedes hacer algo con la respuesta, como navegar al login o mostrar un mensaje
       Alert.alert('Registro Exitoso', 'Ahora puedes iniciar sesión con tu cuenta.');
-      
-      // Restablecer la pila de navegación y navegar al Login
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -51,40 +46,38 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registro</Text>
-
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.text }]}>Registro</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Correo electrónico"
+        placeholderTextColor={theme.colors.placeholderText}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
       />
-
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Contraseña"
+        placeholderTextColor={theme.colors.placeholderText}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
-
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Confirmar Contraseña"
+        placeholderTextColor={theme.colors.placeholderText}
         secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleRegister}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Registrarse</Text>
       </TouchableOpacity>
-
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.linkText}>¿Ya tienes cuenta? Inicia sesión</Text>
+        <Text style={[styles.linkText, { color: theme.colors.linkText }]}>¿Ya tienes cuenta? Inicia sesión</Text>
       </TouchableOpacity>
     </View>
   );
@@ -95,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FDE79C',
+    padding: 20,
   },
   title: {
     fontSize: 24,
@@ -103,28 +96,23 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '80%',
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
-    backgroundColor: '#fff',
   },
   button: {
-    width: '80%',
-    backgroundColor: '#FF6767',
+    width: '100%',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
   },
   linkText: {
     marginTop: 10,
-    color: '#FF6767',
   },
 });

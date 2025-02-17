@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, Scro
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useTheme } from '../context/ThemeContext';
 
 export default function AgregarRecetaScreen({ navigation }) {
   const [nombre, setNombre] = useState('');
@@ -12,6 +13,7 @@ export default function AgregarRecetaScreen({ navigation }) {
   const [ingredientes, setIngredientes] = useState(['']);
   const [pasos, setPasos] = useState(['']);
   const [imagen, setImagen] = useState(null);
+  const theme = useTheme();
 
   const handleAgregarReceta = async () => {
     try {
@@ -121,44 +123,49 @@ export default function AgregarRecetaScreen({ navigation }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Agregar Receta</Text>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.text }]}>Agregar Receta</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Nombre de la receta"
+        placeholderTextColor={theme.colors.placeholderText}
         value={nombre}
         onChangeText={setNombre}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Descripción"
+        placeholderTextColor={theme.colors.placeholderText}
         value={descripcion}
         onChangeText={setDescripcion}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Comensales"
+        placeholderTextColor={theme.colors.placeholderText}
         value={comensales}
         onChangeText={setComensales}
         keyboardType="numeric"
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Tiempo de elaboración"
+        placeholderTextColor={theme.colors.placeholderText}
         value={tiempo}
         onChangeText={setTiempo}
       />
 
-      <Text style={styles.subtitle}>Ingredientes</Text>
+      <Text style={[styles.subtitle, { color: theme.colors.text }]}>Ingredientes</Text>
       {ingredientes.map((ingrediente, index) => (
         <View key={index} style={styles.ingredienteContainer}>
           <TextInput
-            style={[styles.input, styles.ingredienteInput]}
+            style={[styles.input, styles.ingredienteInput, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
             placeholder={`Ingrediente ${index + 1}`}
+            placeholderTextColor={theme.colors.placeholderText}
             value={ingrediente}
             onChangeText={(text) => handleIngredienteChange(text, index)}
           />
@@ -167,16 +174,17 @@ export default function AgregarRecetaScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       ))}
-      <TouchableOpacity style={styles.button} onPress={handleAgregarIngrediente}>
-        <Text style={styles.buttonText}>Agregar Ingrediente</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleAgregarIngrediente}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Agregar Ingrediente</Text>
       </TouchableOpacity>
 
-      <Text style={styles.subtitle}>Pasos</Text>
+      <Text style={[styles.subtitle, { color: theme.colors.text }]}>Pasos</Text>
       {pasos.map((paso, index) => (
         <View key={index} style={styles.pasoContainer}>
           <TextInput
-            style={[styles.input, styles.pasoInput]}
+            style={[styles.input, styles.pasoInput, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
             placeholder={`Paso ${index + 1}`}
+            placeholderTextColor={theme.colors.placeholderText}
             value={paso}
             onChangeText={(text) => handlePasoChange(text, index)}
             multiline
@@ -186,20 +194,20 @@ export default function AgregarRecetaScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       ))}
-      <TouchableOpacity style={styles.button} onPress={handleAgregarPaso}>
-        <Text style={styles.buttonText}>Agregar Paso</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleAgregarPaso}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Agregar Paso</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleSeleccionarImagen}>
-        <Text style={styles.buttonText}>Seleccionar Imagen</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleSeleccionarImagen}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Seleccionar Imagen</Text>
       </TouchableOpacity>
 
       {imagen && (
         <Image source={{ uri: imagen.uri }} style={styles.image} />
       )}
 
-      <TouchableOpacity style={styles.button} onPress={handleAgregarReceta}>
-        <Text style={styles.buttonText}>Agregar</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleAgregarReceta}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Agregar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -210,7 +218,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FDE79C',
     padding: 20,
   },
   title: {
@@ -227,12 +234,10 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 40,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
-    backgroundColor: '#fff',
   },
   ingredienteContainer: {
     flexDirection: 'row',
@@ -264,14 +269,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    backgroundColor: '#FF6767',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
   },
   image: {

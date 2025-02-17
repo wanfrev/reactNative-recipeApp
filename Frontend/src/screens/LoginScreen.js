@@ -3,10 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const theme = useTheme();
 
   const handleLogin = async () => {
     try {
@@ -18,7 +20,6 @@ export default function LoginScreen({ navigation }) {
       const { token } = response.data;
       await AsyncStorage.setItem('token', token);
 
-      // Navegar a la pantalla Home que contiene las pestañas
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -32,57 +33,41 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style = {styles.container_div}>
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
-
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.title, { color: theme.colors.text }]}>Iniciar Sesión</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Correo electrónico"
+        placeholderTextColor={theme.colors.placeholderText}
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
       />
-
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
         placeholder="Contraseña"
+        placeholderTextColor={theme.colors.placeholderText}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleLogin}>
+        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Iniciar Sesión</Text>
       </TouchableOpacity>
-
       <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-        <Text style={styles.linkText}>¿No tienes cuenta? Regístrate</Text>
+        <Text style={[styles.linkText, { color: theme.colors.linkText }]}>¿No tienes cuenta? Regístrate</Text>
       </TouchableOpacity>
-    </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
-  container_div: {
-    flex:1,
-    paddingTop:150,
-    paddingBottom:150,
-    // paddingLeft:50,
-    padding:25,
-    backgroundColor: '#FDE79C',
-
-
-  },
   container: {
-    borderRadius:30,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
+    padding: 20,
   },
   title: {
     fontSize: 24,
@@ -90,28 +75,23 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '80%',
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
-    backgroundColor: '#fff',
   },
   button: {
-    width: '80%',
-    backgroundColor: '#FF6767',
+    width: '100%',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
   },
   linkText: {
     marginTop: 10,
-    color: '#000',
   },
 });

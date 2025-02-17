@@ -8,22 +8,44 @@ import RecetasScreen from "../screens/RecetasScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import PerfilScreen from "../screens/PerfilScreen";
 import AgregarRecetaScreen from "../screens/AgregarRecetaScreen";
+import { useTheme } from "../context/ThemeContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 function PerfilDrawer() {
+  const theme = useTheme();
   return (
-    <Drawer.Navigator initialRouteName="Perfil">
+    <Drawer.Navigator
+      initialRouteName="Perfil"
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        drawerLabelStyle: {
+          color: theme.colors.text,
+        },
+      }}
+    >
       <Drawer.Screen name="Perfil" component={PerfilScreen} />
     </Drawer.Navigator>
   );
 }
 
 function HomeTabs() {
+  const theme = useTheme();
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        tabBarLabelStyle: {
+          color: theme.colors.text,
+        },
+      }}
+    >
       <Tab.Screen name="Recetas" component={RecetasScreen} />
       <Tab.Screen name="Perfil" component={PerfilDrawer} />
     </Tab.Navigator>
@@ -31,14 +53,15 @@ function HomeTabs() {
 }
 
 const AppNavigator = () => {
+  const theme = useTheme();
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#FF3737", // Cambia este color al que desees
+            backgroundColor: theme.colors.buttonBackground,
           },
-          headerTintColor: "#fff", // Color del texto del encabezado
+          headerTintColor: theme.colors.buttonText,
           headerTitleStyle: {
             fontWeight: "bold",
           },
@@ -57,9 +80,9 @@ const AppNavigator = () => {
           options={{
             title: 'Mis Recetas',
             headerStyle: {
-              backgroundColor: '#FF3737',
+              backgroundColor: theme.colors.buttonBackground,
             },
-            headerTintColor: '#FF3737',
+            headerTintColor: theme.colors.buttonText,
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -71,9 +94,9 @@ const AppNavigator = () => {
           options={{
             title: 'Agregar Receta',
             headerStyle: {
-              backgroundColor: '#FF3737',
+              backgroundColor: theme.colors.buttonBackground,
             },
-            headerTintColor: '#fff',
+            headerTintColor: theme.colors.buttonText,
             headerTitleStyle: {
               fontWeight: 'bold',
             },
