@@ -1,43 +1,38 @@
 const mongoose = require('mongoose');
 
 const recipeSchema = new mongoose.Schema({
-  nombre: {
+  name: {
     type: String,
     required: true,
   },
-  descripcion: {
+  description: {
     type: String,
     required: true,
   },
-  comensales: {
-    type: Number,
-    required: true,
-  },
-  tiempo: {
-    type: String,
-    required: true,
-  },
-  ingredientes: {
+  ingredients: {
     type: [String],
     required: true,
   },
-  pasos: {
+  steps: {
     type: [String],
     required: true,
   },
-  imagen: {
+  image: {
     type: String,
-    required: false,
-  },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
+    required: false, // Puedes cambiar a true si la imagen es obligatoria
   },
   groups: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
+    ref: 'Group', // Hace referencia al modelo de Grupo
   }],
+  createdAt: {
+    type: Date,
+    default: Date.now, // Valor por defecto: fecha actual
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now, // Valor por defecto: fecha actual
+  },
 });
 
 module.exports = mongoose.model('Recipe', recipeSchema);
