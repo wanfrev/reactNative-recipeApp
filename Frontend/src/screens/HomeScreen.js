@@ -12,11 +12,11 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Render Header */}
-      <Header headerText={"Hi, Wanfrev"} headerIcon={"bell-o"} textColor={theme.colors.text} />
+      <Header headerText={"Hi, Wanfrev"} headerIcon={"heart"} textColor={theme.colors.text} iconColor={theme.colors.buttonBackground} />
 
       {/* Search Filter */}
       <View style={styles.marginHorizontal}>
-        <SearchFilter icon="search" placeholder={"Search..."} />
+        <SearchFilter icon="search" placeholder={"Search..."} iconColor={theme.colors.buttonBackground} />
       </View>
 
       {/* Categories filter */}

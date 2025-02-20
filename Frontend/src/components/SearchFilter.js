@@ -3,7 +3,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "../context/ThemeContext";
 
-const SearchFilter = ({ icon, placeholder }) => {
+const SearchFilter = ({ icon, placeholder, iconColor }) => {
   const theme = useTheme();
 
   return (
@@ -16,7 +16,7 @@ const SearchFilter = ({ icon, placeholder }) => {
         },
       ]}
     >
-      <FontAwesome name={icon} size={20} color={theme.colors.text} />
+      <FontAwesome name={icon} size={20} color={iconColor} />
       <TextInput
         style={[styles.input, { color: theme.colors.text }]}
         placeholder={placeholder}
