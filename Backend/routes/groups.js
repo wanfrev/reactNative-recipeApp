@@ -26,11 +26,44 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Obtener un grupo específico
+router.get('/:id', async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.id).populate('recipes');
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+    res.json(group);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Añadir receta a grupo
+router.put('/:id/addRecipe', async (req, res) => {
+  const { recipeId } = req.body;
+
+  try {
+    const group = await Group.findById(req.params.id);
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+    group.recipes.push(recipeId);
+    await group.save();
+    res.json(group);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Eliminar grupo
 router.delete('/:id', async (req, res) => {
   try {
-    await Group.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Grupo eliminado' });
+    const group = await Group.findByIdAndDelete(req.params.id);
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+    res.json({ message: 'Group deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

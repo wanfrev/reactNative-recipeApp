@@ -17,33 +17,28 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Ruta para agregar una nueva receta
-router.post('/', upload.single('imagen'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
-    const { nombre, descripcion, comensales, tiempo, ingredientes, pasos, createdBy, groups } = req.body;
-    const receta = new Recipe({
-      nombre,
-      descripcion,
-      comensales,
-      tiempo,
-      ingredientes: JSON.parse(ingredientes),
-      pasos: JSON.parse(pasos),
-      imagen: req.file ? req.file.path : null,
-      createdBy,
-      groups: JSON.parse(groups),
+    const { name, description, ingredients, steps } = req.body;
+    const newRecipe = new Recipe({
+      name,
+      description,
+      ingredients: ingredients.split(","),
+      steps: steps.split(","),
+      image: req.file ? req.file.path : null,
     });
-
-    await receta.save();
-    res.status(201).json({ mensaje: 'Receta agregada exitosamente' });
+    await newRecipe.save();
+    res.status(201).json(newRecipe);
   } catch (error) {
-    res.status(500).json({ error: 'Error al agregar la receta: ' + error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Obtener todas las recetas
 router.get('/', async (req, res) => {
   try {
-    const recetas = await Recipe.find().populate('createdBy').populate('groups');
-    res.json(recetas);
+    const recipes = await Recipe.find();
+    res.json(recipes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -52,8 +47,11 @@ router.get('/', async (req, res) => {
 // Eliminar receta
 router.delete('/:id', async (req, res) => {
   try {
-    await Recipe.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Receta eliminada' });
+    const recipe = await Recipe.findByIdAndDelete(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+    res.json({ message: 'Recipe deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   FlatList,
   Image,
@@ -7,27 +7,12 @@ import {
   Text,
   View,
 } from "react-native";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "../context/ThemeContext";
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
-const RecipeCard = () => {
-  const [recipes, setRecipes] = useState([]);
+const RecipeCard = ({ recipes, fetchRecipes }) => {
   const navigation = useNavigation();
   const theme = useTheme();
-
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get("http://192.168.8.1:5000/api/recipes");
-        setRecipes(response.data);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
 
   return (
     <View>
@@ -35,7 +20,7 @@ const RecipeCard = () => {
         data={recipes}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => navigation.navigate("RecipeDetail", { item: item })}
+            onPress={() => navigation.navigate("RecipeDetail", { item: item, fetchRecipes: fetchRecipes })}
             style={[
               styles.card,
               {
@@ -58,9 +43,7 @@ const RecipeCard = () => {
           </Pressable>
         )}
         numColumns={2}
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-        }}
+        columnWrapperStyle={styles.columnWrapper}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -73,7 +56,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 7,
     borderRadius: 16,
-    marginVertical: 16,
+    marginVertical: 8,
+    marginHorizontal: 8,
     alignItems: "center",
     paddingHorizontal: 8,
     paddingVertical: 26,
@@ -92,6 +76,9 @@ const styles = StyleSheet.create({
   },
   rating: {
     fontSize: 16,
+  },
+  columnWrapper: {
+    justifyContent: "space-between",
   },
 });
 

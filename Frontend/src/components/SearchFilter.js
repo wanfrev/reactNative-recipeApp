@@ -3,7 +3,7 @@ import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { useTheme } from "../context/ThemeContext";
 
-const SearchFilter = ({ icon, placeholder, iconColor }) => {
+const SearchFilter = ({ icon, placeholder, iconColor, onChangeText }) => {
   const theme = useTheme();
 
   return (
@@ -21,6 +21,7 @@ const SearchFilter = ({ icon, placeholder, iconColor }) => {
         style={[styles.input, { color: theme.colors.text }]}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholderText}
+        onChangeText={onChangeText}
       />
     </View>
   );
