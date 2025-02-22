@@ -22,6 +22,7 @@ const SearchFilter = ({ icon, placeholder, iconColor, onChangeText }) => {
         placeholder={placeholder}
         placeholderTextColor={theme.colors.placeholderText}
         onChangeText={onChangeText}
+        maxLength={50} // Limitar el número de caracteres
       />
     </View>
   );

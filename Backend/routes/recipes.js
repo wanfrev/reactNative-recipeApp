@@ -25,7 +25,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       description,
       ingredients: ingredients.split(","),
       steps: steps.split(","),
-      image: req.file ? req.file.path : null,
+      image: req.file ? `/uploads/${req.file.filename}` : null,
     });
     await newRecipe.save();
     res.status(201).json(newRecipe);

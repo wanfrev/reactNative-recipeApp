@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Pressable, FlatList, Image } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Pressable, FlatList, Image, ScrollView } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
+
+import { useIsFocused } from '@react-navigation/native';
 
 const GroupDetailScreen = ({ navigation, route }) => {
   const { groupId } = route.params;
   const theme = useTheme();
   const [group, setGroup] = useState(null);
+  const isFocused = useIsFocused();
 
   const fetchGroup = async () => {
     try {
@@ -19,8 +22,10 @@ const GroupDetailScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    fetchGroup();
-  }, []);
+    if (isFocused) {
+      fetchGroup();
+    }
+  }, [isFocused]);
 
   if (!group) {
     return (
@@ -32,23 +37,25 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={styles.header}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.iconButton}>
-          <FontAwesome name={"arrow-circle-left"} size={24} color={theme.colors.buttonBackground} />
-        </Pressable>
-        <Text style={[styles.title, { color: theme.colors.text }]}>{group.name}</Text>
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.header}>
+          <Pressable onPress={() => navigation.goBack()} style={styles.iconButton}>
+            <FontAwesome name={"arrow-circle-left"} size={24} color={theme.colors.buttonBackground} />
+          </Pressable>
+          <Text style={[styles.title, { color: theme.colors.text }]}>{group.name}</Text>
+        </View>
 
-      <FlatList
-        data={group.recipes}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View style={styles.recipeItem}>
-            <Image source={{ uri: `http://192.168.8.1:5000/${item.image}` }} style={styles.image} />
-            <Text style={[styles.recipeName, { color: theme.colors.text }]}>{item.name}</Text>
-          </View>
-        )}
-      />
+        <FlatList
+          data={group.recipes}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <Pressable onPress={() => navigation.navigate('RecipeDetail', { item, fetchRecipes: fetchGroup })} style={styles.recipeItem}>
+              <Image source={{ uri: `http://192.168.8.1:5000/${item.image}` }} style={styles.image} />
+              <Text style={[styles.recipeName, { color: theme.colors.text }]} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
+            </Pressable>
+          )}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -71,6 +78,9 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
   },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   recipeItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -86,6 +96,8 @@ const styles = StyleSheet.create({
   },
   recipeName: {
     fontSize: 18,
+    flex: 1,
+    flexWrap: 'wrap',
   },
 });
 

@@ -35,6 +35,7 @@ const RecipeDetailScreen = ({ navigation, route }) => {
       await axios.put(`http://192.168.8.1:5000/api/groups/${groupId}/addRecipe`, { recipeId: item._id });
       Alert.alert("Recipe added to group successfully");
       setModalVisible(false);
+      fetchGroups(); // Actualizar los grupos después de agregar la receta
     } catch (error) {
       console.error("Error adding recipe to group:", error);
       Alert.alert("Error adding recipe to group");
@@ -75,35 +76,35 @@ const RecipeDetailScreen = ({ navigation, route }) => {
           <FontAwesome name={"heart"} size={24} color={theme.colors.buttonBackground} style={{ marginTop: 16 }} />
         </Pressable>
       </SafeAreaView>
-      <View
-        style={[
-          styles.content,
-          {
-            backgroundColor: theme.colors.background,
-            marginTop: item.image ? 240 : 0,
-            borderTopLeftRadius: item.image ? 56 : 0,
-            borderTopRightRadius: item.image ? 56 : 0,
-            alignItems: "center",
-            paddingHorizontal: 16,
-          },
-        ]}
-      >
-        {item.image && (
-          <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: `http://192.168.8.1:5000/${item.image}` }}
-              style={styles.image}
-            />
-          </View>
-        )}
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View
+          style={[
+            styles.content,
+            {
+              backgroundColor: theme.colors.background,
+              marginTop: item.image ? 240 : 0,
+              borderTopLeftRadius: item.image ? 56 : 0,
+              borderTopRightRadius: item.image ? 56 : 0,
+              alignItems: "center",
+              paddingHorizontal: 16,
+            },
+          ]}
+        >
+          {item.image && (
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: `http://192.168.8.1:5000/${item.image}` }}
+                style={styles.image}
+              />
+            </View>
+          )}
 
-        {/* Recipe Name */}
-        <Text style={[styles.recipeName, { color: theme.colors.text }]}>
-          {item.name}
-        </Text>
+          {/* Recipe Name */}
+          <Text style={[styles.recipeName, { color: theme.colors.text }]}>
+            {item.name}
+          </Text>
 
-        <View style={{ flex: 1 }}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ flex: 1 }}>
             {/* Recipe Description */}
             <Text style={[styles.description, { color: theme.colors.text }]}>
               {item.description}
@@ -126,6 +127,7 @@ const RecipeDetailScreen = ({ navigation, route }) => {
                   </View>
                 );
               })}
+
             </View>
 
             {/* Recipe steps */}
@@ -143,9 +145,9 @@ const RecipeDetailScreen = ({ navigation, route }) => {
                 );
               })}
             </View>
-          </ScrollView>
+          </View>
         </View>
-      </View>
+      </ScrollView>
 
       {/* Modal para seleccionar grupo */}
       <Modal
@@ -190,6 +192,9 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
   },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   content: {
     flex: 1,
     alignItems: "center",
@@ -214,15 +219,19 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
+    marginHorizontal: 16,
   },
   description: {
     marginVertical: 16,
     fontSize: 20,
     textAlign: "center",
+    flexWrap: 'wrap',
+    marginHorizontal: 16,
   },
   ingredientsContainer: {
     alignSelf: "stretch",
     marginVertical: 22,
+    marginHorizontal: 16,
   },
   sectionTitle: {
     fontSize: 22,
@@ -235,6 +244,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 8,
     justifyContent: "center",
+    marginHorizontal: 16,
   },
   ingredientDot: {
     height: 10,
@@ -244,16 +254,21 @@ const styles = StyleSheet.create({
   ingredientText: {
     fontSize: 18,
     marginLeft: 6,
+    flexWrap: 'wrap',
+    flex: 1,
   },
   stepsContainer: {
     alignSelf: "stretch",
     marginVertical: 22,
+    marginHorizontal: 16,
   },
   stepText: {
     fontSize: 18,
     marginLeft: 6,
     marginVertical: 4,
     textAlign: "center",
+    flexWrap: 'wrap',
+    flex: 1,
   },
   overlay: {
     flex: 1,

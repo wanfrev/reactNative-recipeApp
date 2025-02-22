@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
@@ -46,40 +46,45 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[styles.title, { color: theme.colors.text }]}>Registro</Text>
-      <TextInput
-        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
-        placeholder="Correo electrónico"
-        placeholderTextColor={theme.colors.placeholderText}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
-        placeholder="Contraseña"
-        placeholderTextColor={theme.colors.placeholderText}
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
-        placeholder="Confirmar Contraseña"
-        placeholderTextColor={theme.colors.placeholderText}
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleRegister}>
-        <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Registrarse</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={[styles.linkText, { color: theme.colors.linkText }]}>¿Ya tienes cuenta? Inicia sesión</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <Text style={[styles.title, { color: theme.colors.text }]}>Registro</Text>
+        <TextInput
+          style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
+          placeholder="Correo electrónico"
+          placeholderTextColor={theme.colors.placeholderText}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+          maxLength={50} // Limitar el número de caracteres
+        />
+        <TextInput
+          style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
+          placeholder="Contraseña"
+          placeholderTextColor={theme.colors.placeholderText}
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+          maxLength={20} // Limitar el número de caracteres
+        />
+        <TextInput
+          style={[styles.input, { backgroundColor: theme.colors.inputBackground, borderColor: theme.colors.inputBorder, color: theme.colors.text }]}
+          placeholder="Confirmar Contraseña"
+          placeholderTextColor={theme.colors.placeholderText}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          maxLength={20} // Limitar el número de caracteres
+        />
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.colors.buttonBackground }]} onPress={handleRegister}>
+          <Text style={[styles.buttonText, { color: theme.colors.buttonText }]}>Registrarse</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={[styles.linkText, { color: theme.colors.linkText }]}>¿Ya tienes cuenta? Inicia sesión</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -89,6 +94,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,

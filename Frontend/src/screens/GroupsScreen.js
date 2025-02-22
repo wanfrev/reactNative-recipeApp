@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Pressable, Modal, FlatList, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Pressable, Modal, FlatList, TextInput, ScrollView } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
@@ -55,18 +55,20 @@ const GroupsScreen = ({ navigation }) => {
         </Pressable>
       </View>
 
-      <FlatList
-        data={groups}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => navigation.navigate('GroupDetail', { groupId: item._id })} style={styles.groupItem}>
-            <Text style={[styles.groupName, { color: theme.colors.text }]}>{item.name}</Text>
-            <Pressable onPress={() => handleDeleteGroup(item._id)} style={styles.iconButton}>
-              <FontAwesome name={"trash"} size={24} color={theme.colors.buttonBackground} />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <FlatList
+          data={groups}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <Pressable onPress={() => navigation.navigate('GroupDetail', { groupId: item._id })} style={styles.groupItem}>
+              <Text style={[styles.groupName, { color: theme.colors.text }]}>{item.name}</Text>
+              <Pressable onPress={() => handleDeleteGroup(item._id)} style={styles.iconButton}>
+                <FontAwesome name={"trash"} size={24} color={theme.colors.buttonBackground} />
+              </Pressable>
             </Pressable>
-          </Pressable>
-        )}
-      />
+          )}
+        />
+      </ScrollView>
 
       <Modal
         animationType="slide"
@@ -115,6 +117,9 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 10,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   groupItem: {
     flexDirection: "row",

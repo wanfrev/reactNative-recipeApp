@@ -30,7 +30,7 @@ const RecipeCard = ({ recipes, fetchRecipes }) => {
             ]}
           >
             <Image
-              source={{ uri: `http://192.168.8.1:5000/${item.image}` }}
+              source={{ uri: `http://192.168.8.1:5000${item.image}` }}
               style={styles.image}
             />
             <Text style={[styles.name, { color: theme.colors.text }]}>{item.name}</Text>

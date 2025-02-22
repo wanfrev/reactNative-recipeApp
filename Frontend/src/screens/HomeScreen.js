@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet, Pressable, Modal } from "react-native";
+import { View, Text, SafeAreaView, StyleSheet, Pressable, Modal, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import SearchFilter from "../components/SearchFilter";
@@ -40,33 +40,35 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      {/* Render Header */}
-      <Header headerText={"Hi, Wanfrev"} headerIcon={"heart"} textColor={theme.colors.text} iconColor={theme.colors.buttonBackground} onPress={() => navigation.navigate('Groups')} />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {/* Render Header */}
+        <Header headerText={"Hi, Wanfrev"} headerIcon={"heart"} textColor={theme.colors.text} iconColor={theme.colors.buttonBackground} onPress={() => navigation.navigate('Groups')} />
 
-      {/* Search Filter */}
-      <View style={styles.marginHorizontal}>
-        <SearchFilter
-          icon="search"
-          placeholder={"Search..."}
-          iconColor={theme.colors.buttonBackground}
-          onChangeText={setSearchTerm}
-        />
-      </View>
+        {/* Search Filter */}
+        <View style={styles.marginHorizontal}>
+          <SearchFilter
+            icon="search"
+            placeholder={"Search..."}
+            iconColor={theme.colors.buttonBackground}
+            onChangeText={setSearchTerm}
+          />
+        </View>
 
-      {/* Categories filter */}
-      <View style={[styles.marginHorizontal, { marginTop: 22 }]}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Categories</Text>
+        {/* Categories filter */}
+        <View style={[styles.marginHorizontal, { marginTop: 22 }]}>
+          <Text style={[styles.title, { color: theme.colors.text }]}>Categories</Text>
 
-        {/* Categories list */}
-        <CategoriesFilter />
-      </View>
+          {/* Categories list */}
+          <CategoriesFilter />
+        </View>
 
-      {/* Recipe list */}
-      <View style={[styles.marginHorizontal, { marginTop: 22, flex: 1 }]}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Recipes</Text>
-        
-        <RecipeCard recipes={filteredRecipes} fetchRecipes={fetchRecipes} />
-      </View>
+        {/* Recipe list */}
+        <View style={[styles.marginHorizontal, { marginTop: 22, flex: 1 }]}>
+          <Text style={[styles.title, { color: theme.colors.text }]}>Recipes</Text>
+          
+          <RecipeCard recipes={filteredRecipes} fetchRecipes={fetchRecipes} />
+        </View>
+      </ScrollView>
 
       {/* Botón circular */}
       <Pressable
@@ -99,6 +101,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#121212', // Asegurarse de que el fondo sea oscuro
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   title: {
     fontSize: 22,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { useTheme } from '../context/ThemeContext';
@@ -13,6 +13,11 @@ const AddRecipeForm = ({ onClose }) => {
   const [image, setImage] = useState(null);
 
   const handleAddRecipe = async () => {
+    if (!name || !description || !ingredients || !steps) {
+      Alert.alert('Error', 'Todos los campos son obligatorios');
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append('name', name);
@@ -62,6 +67,7 @@ const AddRecipeForm = ({ onClose }) => {
         onChangeText={setName}
         style={[styles.input, { color: theme.colors.text, borderColor: theme.colors.border }]}
         placeholderTextColor={theme.colors.placeholderText}
+        maxLength={50} // Limitar el número de caracteres
       />
       <TextInput
         placeholder="Description"
@@ -69,6 +75,7 @@ const AddRecipeForm = ({ onClose }) => {
         onChangeText={setDescription}
         style={[styles.input, { color: theme.colors.text, borderColor: theme.colors.border }]}
         placeholderTextColor={theme.colors.placeholderText}
+        maxLength={200} // Limitar el número de caracteres
       />
       <TextInput
         placeholder="Ingredients (comma separated)"
@@ -76,6 +83,7 @@ const AddRecipeForm = ({ onClose }) => {
         onChangeText={setIngredients}
         style={[styles.input, { color: theme.colors.text, borderColor: theme.colors.border }]}
         placeholderTextColor={theme.colors.placeholderText}
+        maxLength={200} // Limitar el número de caracteres
       />
       <TextInput
         placeholder="Steps (comma separated)"
@@ -83,6 +91,7 @@ const AddRecipeForm = ({ onClose }) => {
         onChangeText={setSteps}
         style={[styles.input, { color: theme.colors.text, borderColor: theme.colors.border }]}
         placeholderTextColor={theme.colors.placeholderText}
+        maxLength={200} // Limitar el número de caracteres
       />
       <TouchableOpacity onPress={pickImage} style={styles.button}>
         <Text style={styles.buttonText}>Pick Image</Text>
